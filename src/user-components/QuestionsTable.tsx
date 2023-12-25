@@ -10,7 +10,7 @@ function QuestionTable({ name, questions }: { name: string, questions: string[] 
                         <TableCaption>{name} Questions</TableCaption>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-[5vw]">Q. No.</TableHead>
+                                <TableHead className="w-[8vw]">Q. No.</TableHead>
                                 <TableHead className="w-[85vw]">Question</TableHead>
                                 <TableHead>Status</TableHead>
                             </TableRow>
