@@ -37,7 +37,7 @@ export default function RootLayout({
                     <div className="hidden md:block">
                         <div className="ml-10 flex items-baseline space-x-4">
                             <a href="/" className="text-auto px-3 py-2 rounded-md text-sm font-medium">Home</a>
-                            <a href="/about" className="text-auto px-3 py-2 rounded-md text-sm font-medium">Features</a>
+                            <a href="/features" className="text-auto px-3 py-2 rounded-md text-sm font-medium">Features</a>
                         </div>
                     </div>
                 </div>
