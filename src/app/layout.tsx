@@ -35,15 +35,12 @@ export default function RootLayout({
                       PCI-DSS v4.0
                     </div></a>
                 </div>
-                {/* <div className="hidden md:block">
-                    <div className="ml-4 flex items-center md:ml-6">
-                    </div>
-                </div> */}
             </div>
         </div>
       </nav>
         <ThemeProvider
-            attribute="className"
+            attribute="class"
+            defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >

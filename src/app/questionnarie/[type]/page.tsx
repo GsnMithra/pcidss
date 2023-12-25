@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { a, b, c, p2pe } from '../../../data/criteria';
-import QuestionTable from '@/user-components/QuestionsTable'
+import QuestionTable from '@/user-components/questiontable'
 
 export default function Questionnaire({ params }: { params: { type: string } }) {
 

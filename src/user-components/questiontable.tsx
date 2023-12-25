@@ -4,6 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Label } from "@/components/ui/label";
+import { useState } from "react";
 
 interface QuestionTableProps {
     name: string;
@@ -26,6 +27,8 @@ const QuestionTable: React.FC<QuestionTableProps> = ({ name, questions, checkLis
     //     .then(data => data)
     //     .catch(error => console.error('Error:', error));
     // }
+
+    const [selectAll, setSelectAll] = useState(false);
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-between w-100 pt-0 mt-0">
@@ -58,6 +61,22 @@ const QuestionTable: React.FC<QuestionTableProps> = ({ name, questions, checkLis
                                     </TableCell>
                                 </TableRow>
                             ))}
+                            <TableRow>
+                                    <TableCell className="font-medium"></TableCell>
+                                    <TableCell className="font-bold">Select All</TableCell>
+                                    <TableCell className="font-medium">
+                                        <Checkbox
+                                            className='m-2'
+                                            checked={selectAll}
+                                            onCheckedChange={() => {
+                                                const newCheckList = [...checkList];
+                                                newCheckList.fill(!selectAll);
+                                                checkerList(newCheckList);
+                                                setSelectAll(!selectAll);
+                                            }}
+                                        />
+                                    </TableCell>
+                                </TableRow>
                         </TableBody>
                     </Table>
                 </div>
