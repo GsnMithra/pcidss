@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import Link from "next/link"
 
@@ -6,14 +7,14 @@ export default function Home() {
   return (
     <main className="flex flex-col items-center justify-between p-12 w-100">
       <div className="flex items-center justify-center text-auto font-medium text-xl self-start flex-col gap-20">
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center flex-col">
+          <Label className="font-bold opacity-50">Determine Your PCI DSS v4.0 SAQ Type: A Guide for Merchants</Label>
           <Table>
-            <TableCaption>Determine Your PCI DSS v4.0 SAQ Type: A Guide for Merchants</TableCaption>
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[100px]">SAQ Type</TableHead>
                 <TableHead>Description</TableHead>
-                <TableHead>Eligibility Check</TableHead>
+                <TableHead className="w-[50px]">Check</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

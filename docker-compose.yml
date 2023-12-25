@@ -11,3 +11,24 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+    depends_on:
+      - flask
+    networks:
+      - pcidss-network
+    
+  flask:
+    container_name: pcidss-flask
+    build:
+      context: ./src/server
+      dockerfile: Dockerfile
+    ports:
+      - "6969:6969"
+    volumes:
+      - ./src/server:/app
+      - /app/__pycache__
+    networks:
+      - pcidss-network
+
+networks:
+  pcidss-network:
+    driver: bridge

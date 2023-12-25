@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from 'react';
-import { a, b, c, p2pe } from '../../../data/questions';
+import { a, b, c, p2pe } from '../../../data/criteria';
 import QuestionTable from '@/user-components/QuestionsTable'
 
 export default function Questionnaire({ params }: { params: { type: string } }) {
@@ -12,7 +12,7 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
     const [P2PEChecked, setP2PEChecked] = useState(Array(a.length).fill(false))
 
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-12 w-100">
+        <main className="flex min-h-screen flex-col items-center justify-between p-12 w-100 pt-0">
             <div>
                 {params.type === 'a' && <QuestionTable name="SAQ A" questions={a} checkList={AChecked} checkerList={setAChecked}/>}
                 {params.type === 'b' && <QuestionTable name="SAQ B" questions={b} checkList={BChecked} checkerList={setBChecked}/>}

@@ -32,25 +32,18 @@ export default function RootLayout({
             <div className="flex items-center justify-start h-16">
                 <div className="flex items-center">
                     <a href='/'><div className="text-auto font-bold text-2xl">
-                      PCI-DSS
+                      PCI-DSS v4.0
                     </div></a>
-                    <div className="hidden md:block">
-                        <div className="ml-10 flex items-baseline space-x-4">
-                            <a href="/" className="text-auto px-3 py-2 rounded-md text-sm font-medium">Home</a>
-                            <a href="/features" className="text-auto px-3 py-2 rounded-md text-sm font-medium">Features</a>
-                        </div>
-                    </div>
                 </div>
-                <div className="hidden md:block">
+                {/* <div className="hidden md:block">
                     <div className="ml-4 flex items-center md:ml-6">
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
       </nav>
         <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
+            attribute="className"
             enableSystem
             disableTransitionOnChange
           >
