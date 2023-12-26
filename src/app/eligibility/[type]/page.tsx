@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { a, b, c, p2pe } from '../../../data/criteria';
 import QuestionTable from '@/user-components/questiontable'
 
-export default function Questionnaire({ params }: { params: { type: string } }) {
+export default function Eligibility({ params }: { params: { type: string } }) {
 
     const [AChecked, setAChecked] = useState(Array(a.length).fill(false))
     const [BChecked, setBChecked] = useState(Array(b.length).fill(false))

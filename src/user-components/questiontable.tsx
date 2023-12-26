@@ -2,8 +2,15 @@
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Label } from "@/components/ui/label";
+import { 
+    Table, 
+    TableBody, 
+    TableCell, 
+    TableHead, 
+    TableHeader, 
+    TableRow 
+} from "@/components/ui/table";
 import {
     AlertDialog,
     AlertDialogCancel,
@@ -16,6 +23,7 @@ import {
 } from "@/components/ui/alert-dialog"
 
 import { useEffect, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 
 interface QuestionTableProps {
     name: string;
@@ -25,6 +33,7 @@ interface QuestionTableProps {
 }
 
 const QuestionTable: React.FC<QuestionTableProps> = ({ name, questions, checkList, checkerList }) => {
+    const router = useRouter();
     const [selectAll, setSelectAll] = useState(false);
     const checkedAll = useCallback(() => {
         return checkList.every((c) => c === true);
@@ -44,6 +53,10 @@ const QuestionTable: React.FC<QuestionTableProps> = ({ name, questions, checkLis
          
             return;
         }
+        
+        const saq: string[] = name.toLowerCase().split(' ')
+        const saqType = (saq.length == 1) ? saq[0] : saq[1]
+        router.push(`/questionnaire/${saqType}`)
     };
 
     return (
