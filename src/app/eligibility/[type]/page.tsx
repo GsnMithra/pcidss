@@ -7,9 +7,9 @@ import QuestionTable from '@/user-components/questiontable'
 export default function Questionnaire({ params }: { params: { type: string } }) {
 
     const [AChecked, setAChecked] = useState(Array(a.length).fill(false))
-    const [BChecked, setBChecked] = useState(Array(a.length).fill(false))
-    const [CChecked, setCChecked] = useState(Array(a.length).fill(false))
-    const [P2PEChecked, setP2PEChecked] = useState(Array(a.length).fill(false))
+    const [BChecked, setBChecked] = useState(Array(b.length).fill(false))
+    const [CChecked, setCChecked] = useState(Array(c.length).fill(false))
+    const [P2PEChecked, setP2PEChecked] = useState(Array(p2pe.length).fill(false))
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-between p-12 w-100 pt-0">

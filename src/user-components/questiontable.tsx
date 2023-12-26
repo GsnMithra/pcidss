@@ -2,9 +2,20 @@
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
+import { useEffect, useState, useCallback } from "react";
 
 interface QuestionTableProps {
     name: string;
@@ -14,27 +25,32 @@ interface QuestionTableProps {
 }
 
 const QuestionTable: React.FC<QuestionTableProps> = ({ name, questions, checkList, checkerList }) => {
-    // const getQuestions = (q: any) => {
-    //     console.log(q)
-    //     return fetch('http://127.0.0.1:6969/autofill', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify({ question: q, saq_type: name }),
-    //     })
-    //     .then(response => response.json())
-    //     .then(data => data)
-    //     .catch(error => console.error('Error:', error));
-    // }
-
     const [selectAll, setSelectAll] = useState(false);
+    const checkedAll = useCallback(() => {
+        return checkList.every((c) => c === true);
+    }, [checkList]);
+
+    useEffect(() => {
+        const result = checkedAll()
+        console.log(result)
+        setSelectAll(result)
+    }, [checkList, checkedAll])
+
+    const handleSubmit = () => {
+        if (!checkedAll()) {
+            const triggerAlertElement = document.getElementById("triggerAlert");
+            if (triggerAlertElement) 
+                triggerAlertElement.click();
+         
+            return;
+        }
+    };
 
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between w-100 pt-0 mt-0">
+        <main className="flex min-h-screen flex-col items-center justify-between w-100 pt-0 mt-0 mb-0">
             <div className="flex flex-col items-center justify-center gap-5">
                 <div className="flex flex-col items-center justify-center">
-                <Label className="font-bold opacity-50 p-10">{name} Eligility Questions</Label>
+                    <Label className="font-bold opacity-50 p-5">{name} Eligility Questions</Label>
                     <Table className="w-100">
                         <TableHeader>
                             <TableRow>
@@ -80,9 +96,26 @@ const QuestionTable: React.FC<QuestionTableProps> = ({ name, questions, checkLis
                         </TableBody>
                     </Table>
                 </div>
-                <div className="flex">
-                    <Button>Check</Button>
+                <div>
+                    <Button onClick={handleSubmit}>Submit</Button>
                 </div>
+                <AlertDialog>
+                    <AlertDialogTrigger>
+                        <div className="flex" id="triggerAlert">
+                        </div>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>You are ineligible to take the questionnaire</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                You must comply with all of the following questions to be eligible for the questionnaire
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </div>
         </main>
     )

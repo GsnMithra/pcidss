@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import Link from "next/link"
 
 export default function Home() {
@@ -22,7 +22,7 @@ export default function Home() {
                 <TableCell className="font-medium">A</TableCell>
                 <TableCell>This questionnaire is intended for merchants who outsource all cardholder data functions to PCI DSS compliant third-party service providers and have no direct control of the manner in which cardholder data is processed or stored.</TableCell>
                 <TableCell className="text-right">
-                  <Link href="/questionnarie/a">
+                  <Link href="/eligibility/a">
                     <Button variant="outline">
                       Go
                     </Button>
@@ -33,7 +33,7 @@ export default function Home() {
                 <TableCell className="font-medium">B</TableCell>
                 <TableCell>Suitable for merchants who use only imprint machines or standalone, dial-out terminals to process card payments, with no electronic cardholder data storage.</TableCell>
                 <TableCell className="text-right">
-                  <Link href="/questionnarie/b">
+                  <Link href="/eligibility/b">
                     <Button variant="outline">
                       Go
                     </Button>
@@ -44,7 +44,7 @@ export default function Home() {
                 <TableCell className="font-medium">C</TableCell>
                 <TableCell>Intended for merchants with payment application systems connected to the Internet, without electronic cardholder data storage.</TableCell>
                 <TableCell className="text-right">
-                  <Link href="/questionnarie/c">
+                  <Link href="/eligibility/c">
                     <Button variant="outline">
                       Go
                     </Button>
@@ -55,7 +55,7 @@ export default function Home() {
                 <TableCell className="font-medium">P2PE</TableCell>
                 <TableCell>Applicable to merchants using hardware payment terminals included in and managed via a validated, PCI SSC-listed Point-to-Point Encryption (P2PE) solution, with no electronic cardholder data storage.</TableCell>
                 <TableCell className="text-right">
-                  <Link href="/questionnarie/p2pe">
+                  <Link href="/eligibility/p2pe">
                     <Button variant="outline">
                       Go
                     </Button>
