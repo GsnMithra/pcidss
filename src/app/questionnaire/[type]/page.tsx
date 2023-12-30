@@ -47,6 +47,42 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
             triggerAlertElement.click();
     }
 
+    const fetchRelatedQuestions = async (i: number) => {
+        const question = "Q" + (i + 1);
+        
+        const saq_type = params.type
+        const response = await fetch('http://0.0.0.0:6969/autofill', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                question,
+                saq_type
+            })
+        })
+        return await response.json()
+    }
+
+    const handleRadioSelect = async (e: any, i: number) => {
+        const selected = e.toString()
+        const data = await fetchRelatedQuestions(i)
+
+        setCheckedStates(prevStates => {
+            const newStates = [...prevStates];
+            newStates[i] = selected;
+            
+            if (autofill) {
+                data.forEach((d: number) => {
+                    if (d - 1 > i && newStates[d - 1] === "")
+                        newStates[d - 1] = selected;
+                });
+            }
+
+            return newStates;
+        })
+    }
+
     useEffect(() => {
         const handleBeforeUnload = (event: BeforeUnloadEvent) => {
             const confirmationMessage = 'Are you sure you want to leave? Your progress will be lost.'
@@ -85,38 +121,7 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
                                 <TableCell className="font-medium">{i + 1}</TableCell>
                                 <TableCell className="font-medium">{q}</TableCell>
                                 <TableCell className="font-medium">
-                                <RadioGroup className="flex flex-row gap-10" value={checkedStates[i]} onValueChange={async (e) => {
-                                    const question = "Q" + (i + 1);
-                                    const selected = e.toString()
-                                    const saq_type = params.type
-
-                                    const body = {
-                                        question,
-                                        saq_type
-                                    }
-                                    const response = await fetch('http://0.0.0.0:6969/autofill', {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json'
-                                        },
-                                        body: JSON.stringify(body)
-                                    })
-                                    const data = await response.json()
-
-                                    setCheckedStates(prevStates => {
-                                        const newStates = [...prevStates];
-                                        newStates[i] = selected;
-                                        
-                                        if (autofill) {
-                                            data.forEach((d: number) => {
-                                                if (d - 1 > i && newStates[d - 1] === "")
-                                                    newStates[d - 1] = selected;
-                                            });
-                                        }
-
-                                        return newStates;
-                                    })
-                                }}>
+                                <RadioGroup className="flex flex-row gap-10" value={checkedStates[i]} onValueChange={(e) => {handleRadioSelect(e, i)}}>
                                     <div className="flex items-center space-x-2">
                                         <RadioGroupItem value="Yes" id="option-one"/>
                                         <Label htmlFor="option-one">Yes</Label>
@@ -141,22 +146,22 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
                 <Button onClick={handleSubmit}>Submit</Button>
             </div>
             <AlertDialog>
-                    <AlertDialogTrigger>
-                        <div className="flex" id="triggerAlertQuestionnaire">
-                        </div>
-                    </AlertDialogTrigger>
+                <AlertDialogTrigger>
+                    <div className="flex" id="triggerAlertQuestionnaire">
+                    </div>
+                </AlertDialogTrigger>
                     <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>You must answer all the questions.</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                You must have all the answers to the questions before proceeding any further.
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>You must answer all the questions.</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            You must have all the answers to the questions before proceeding any further.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </main>
     )
 }
