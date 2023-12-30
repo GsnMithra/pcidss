@@ -41,7 +41,6 @@ const QuestionTable: React.FC<QuestionTableProps> = ({ name, questions, checkLis
 
     useEffect(() => {
         const result = checkedAll()
-        console.log(result)
         setSelectAll(result)
     }, [checkList, checkedAll])
 

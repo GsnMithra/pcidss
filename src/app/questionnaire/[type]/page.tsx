@@ -11,9 +11,10 @@ import {
 } from '@/components/ui/table';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { a, b, c, p2pe } from '../../../data/questions';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
+import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 
 export default function Questionnaire({ params }: { params: { type: string } }) {
     const questionMap : { [key: string]: string[] } = {
@@ -26,6 +27,16 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
     const [checkedStates, setCheckedStates] = useState(Array(questions.length).fill(""))
     const [autofill, setAutofill] = useState(true)
 
+    const answeredAll = useCallback(() => {
+        return checkedStates.every((c) => c !== "");
+    }, [checkedStates]);
+
+    const handleSubmit = () => {
+        const triggerAlertElement = document.getElementById("triggerAlertQuestionnaire");
+        if (!answeredAll() && triggerAlertElement) 
+            triggerAlertElement.click();
+    }
+
     useEffect(() => {
         const handleBeforeUnload = (event: BeforeUnloadEvent) => {
             const confirmationMessage = 'Are you sure you want to leave? Your progress will be lost.'
@@ -33,10 +44,10 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
             return confirmationMessage
         };
 
-        window.addEventListener('beforeunload', handleBeforeUnload);
+        window.addEventListener('beforeUnload', handleBeforeUnload);
 
         return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
+            window.removeEventListener('beforeUnload', handleBeforeUnload);
         };
     }, []);
 
@@ -67,6 +78,7 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
                                     const question = "Q" + (i + 1);
                                     const selected = e.toString()
                                     const saq_type = params.type
+
                                     const body = {
                                         question,
                                         saq_type
@@ -79,6 +91,7 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
                                         body: JSON.stringify(body)
                                     })
                                     const data = await response.json()
+
                                     setCheckedStates(prevStates => {
                                         const newStates = [...prevStates];
                                         newStates[i] = selected;
@@ -114,8 +127,25 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
                 </div>
             </div>
             <div>
-                <Button>Submit</Button>
+                <Button onClick={handleSubmit}>Submit</Button>
             </div>
+            <AlertDialog>
+                    <AlertDialogTrigger>
+                        <div className="flex" id="triggerAlertQuestionnaire">
+                        </div>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>You must answer all the questions.</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                You must have all the answers to the questions before proceeding any further.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
         </main>
     )
 }
