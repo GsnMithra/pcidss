@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask import Flask, jsonify, request, make_response
 
 app = Flask(__name__)
-CORS(app, resources={r'/autofill': {'origins': 'http://localhost:3000'}})
+CORS(app, resources={r'/autofill': {'origins': 'http://localhost:3001'}})
 
 a = pds.read_csv('data/a.csv')
 b = pds.read_csv('data/b.csv')

@@ -11,7 +11,7 @@ export const fontSans = Work_Sans({
 
 export const metadata: Metadata = {
   title: 'PCI-DSS',
-  description: 'PCI-PCI DSS v4.0',
+  description: 'PCI-PCI DSS v4.0'
 }
 
 export default function RootLayout({
@@ -27,7 +27,7 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <nav className="flex bg-black-800 w-full">
+      <nav className="flex bg-black-800 w-full">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-start h-16">
                 <div className="flex items-center">
