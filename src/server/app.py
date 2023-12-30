@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask import Flask, jsonify, request, make_response
 
 app = Flask(__name__)
-CORS(app, resources={r'/autofill': {'origins': 'http://localhost:3001'}})
+CORS(app, resources={r'/autofill': {'origins': '*'}})
 
 a = pds.read_csv('data/a.csv')
 b = pds.read_csv('data/b.csv')
@@ -45,4 +45,4 @@ def autofill():
     result = [r for r in result if r > int(question[1:])]
     return jsonify(result)
 
-app.run(debug=True, port=6969)
+app.run(host='0.0.0.0',port=6969, debug=True)

@@ -1,6 +1,6 @@
 "use client"
 
-import { Label } from '@/components/ui/label';
+import { Label } from '@/components/ui/label'
 import { 
     Table, 
     TableBody, 
@@ -8,13 +8,13 @@ import {
     TableHead, 
     TableHeader, 
     TableRow
-} from '@/components/ui/table';
+} from '@/components/ui/table'
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { a, b, c, p2pe } from '../../../data/questions';
-import { useCallback, useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { a, b, c, p2pe } from '../../../data/questions'
+import { useCallback, useEffect, useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Switch } from '@/components/ui/switch'
+import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 
 export default function Questionnaire({ params }: { params: { type: string } }) {
     const questionMap : { [key: string]: string[] } = {
@@ -26,6 +26,16 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
     const questions: string[] = questionMap[params.type]
     const [checkedStates, setCheckedStates] = useState(Array(questions.length).fill(""))
     const [autofill, setAutofill] = useState(true)
+
+    const testFillAnswers = () => {
+        const testAnswers = Array(questions.length)
+        const randoms = ["Yes", "No", "NA"]
+        for (let i = 0; i < questions.length; i += 1) {
+            const randomIdx = Math.floor(Math.random() * 3)
+            testAnswers[i] = randoms[randomIdx]
+        }
+        setCheckedStates(testAnswers)
+    }
 
     const answeredAll = useCallback(() => {
         return checkedStates.every((c) => c !== "");
@@ -56,9 +66,10 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
             <div className="flex m-5">
                 <div className="flex flex-col items-center justify-center">
                     <Label className="font-bold opacity-50 p-5">Questionnaire {params.type.toUpperCase()}</Label>
-                    <div className="flex m-3 items-center justify-center">
-                        <Label className="font-medium opacity-35 m-2">Auto Fill</Label>
+                    <div className="flex m-3 items-center justify-center gap-5">
+                        <Label className="font-medium opacity-35">Auto Fill</Label>
                         <Switch checked={autofill} onCheckedChange={() => {setAutofill(!autofill)}}/>
+                        <Button onClick={testFillAnswers}>Random (development/testing)</Button>
                     </div>
                     <Table className="w-100">
                         <TableHeader>
@@ -83,7 +94,7 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
                                         question,
                                         saq_type
                                     }
-                                    const response = await fetch('http://127.0.0.1:6969/autofill', {
+                                    const response = await fetch('http://0.0.0.0:6969/autofill', {
                                         method: 'POST',
                                         headers: {
                                             'Content-Type': 'application/json'
@@ -98,7 +109,7 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
                                         
                                         if (autofill) {
                                             data.forEach((d: number) => {
-                                                if (d - 1 > i)
+                                                if (d - 1 > i && newStates[d - 1] === "")
                                                     newStates[d - 1] = selected;
                                             });
                                         }

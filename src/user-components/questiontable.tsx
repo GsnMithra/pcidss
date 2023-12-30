@@ -44,6 +44,19 @@ const QuestionTable: React.FC<QuestionTableProps> = ({ name, questions, checkLis
         setSelectAll(result)
     }, [checkList, checkedAll])
 
+    const checkElement = (i: number) => {
+        const newCheckList = [...checkList];
+        newCheckList[i] = !newCheckList[i];
+        checkerList(newCheckList); 
+    }
+
+    const checkAllElements = () => {
+        const newCheckList = [...checkList];
+        newCheckList.fill(!selectAll);
+        checkerList(newCheckList);
+        setSelectAll(!selectAll);
+    }
+
     const handleSubmit = () => {
         if (!checkedAll()) {
             const triggerAlertElement = document.getElementById("triggerAlert");
@@ -74,34 +87,25 @@ const QuestionTable: React.FC<QuestionTableProps> = ({ name, questions, checkLis
                         <TableBody>
                             {questions.map((q, i) => (
                                 <TableRow key={q}>
-                                    <TableCell className="font-medium">{i + 1}</TableCell>
-                                    <TableCell className="font-medium">{q}</TableCell>
-                                    <TableCell className="font-medium">
+                                    <TableCell className="font-medium cursor-pointer" onClick={() => {checkElement (i)}}>{i + 1}</TableCell>
+                                    <TableCell className="font-medium cursor-pointer" onClick={() => {checkElement (i)}}>{q}</TableCell>
+                                    <TableCell className="font-medium cursor-pointer">
                                         <Checkbox
                                             className='m-2'
                                             checked={checkList[i]}
-                                            onCheckedChange={() => {
-                                                const newCheckList = [...checkList];
-                                                newCheckList[i] = !newCheckList[i];
-                                                checkerList(newCheckList);                                            
-                                            }}
+                                            onCheckedChange={() => {checkElement (i)}}
                                         />
                                     </TableCell>
                                 </TableRow>
                             ))}
                             <TableRow>
-                                    <TableCell className="font-medium"></TableCell>
-                                    <TableCell className="font-bold">Select All</TableCell>
-                                    <TableCell className="font-medium">
+                                    <TableCell className="font-medium cursor-pointer" onClick={checkAllElements}></TableCell>
+                                    <TableCell className="font-bold cursor-pointer" onClick={checkAllElements}>Select All</TableCell>
+                                    <TableCell className="font-medium cursor-pointer" onClick={checkAllElements}>
                                         <Checkbox
                                             className='m-2'
                                             checked={selectAll}
-                                            onCheckedChange={() => {
-                                                const newCheckList = [...checkList];
-                                                newCheckList.fill(!selectAll);
-                                                checkerList(newCheckList);
-                                                setSelectAll(!selectAll);
-                                            }}
+                                            onCheckedChange={checkAllElements}
                                         />
                                     </TableCell>
                                 </TableRow>

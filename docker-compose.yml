@@ -21,8 +21,6 @@ services:
     build:
       context: ./src/server
       dockerfile: Dockerfile
-    ports:
-      - "6969:6969"
     volumes:
       - ./src/server:/app
       - /app/__pycache__
