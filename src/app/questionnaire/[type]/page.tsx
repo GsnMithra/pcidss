@@ -54,10 +54,10 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
             return confirmationMessage
         };
 
-        window.addEventListener('beforeUnload', handleBeforeUnload);
+        window.addEventListener('beforeunload', handleBeforeUnload);
 
         return () => {
-            window.removeEventListener('beforeUnload', handleBeforeUnload);
+            window.removeEventListener('beforeunload', handleBeforeUnload);
         };
     }, []);
 
