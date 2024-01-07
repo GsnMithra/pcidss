@@ -1,5 +1,11 @@
 "use client"
 
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion"
 import { 
     Table, 
     TableBody, 
@@ -22,18 +28,30 @@ import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { a, b, c, p2pe } from '../../../data/questions'
 
-import { answersP2PE } from '@/data/p2pe/answers'
-import { answersA } from '@/data/saqa/answers'
-import { answersC } from '@/data/saqc/answers'
-// import { p2peInfo } from '@/data/p2pe/info'
+import { answersA } from "@/data/saqa/answers"
+// import { answersB } from "@/data/saqb/answers"
+import { answersC } from "@/data/saqc/answers"
+import { answersP2PE } from "@/data/p2pe/answers"
+
+import { AInfo } from '@/data/saqa/info'
+import { BInfo } from '@/data/saqb/info'
+import { CInfo } from '@/data/saqc/info'
+import { p2peInfo } from '@/data/p2pe/info';
 
 import { useCallback, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
-import { useRouter } from 'next/navigation'
+import { Text } from 'lucide-react'
+
+interface SecurityQuestion {
+    question: string;
+    domain: string;
+    requirement: string;
+    issueIfNotCompliant: string;
+    remediation: string;
+}
 
 export default function Questionnaire({ params }: { params: { type: string } }) {
-    const router = useRouter();
     let answerMap: { [key: string]: number[] } = {};
     const questionMap : { [key: string]: string[] } = {
         'a': a,
@@ -41,10 +59,28 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
         'c': c,
         'p2pe': p2pe
     }
+    const infoMap : { [key: string]: any } = {
+        'a': AInfo,
+        'b': BInfo,
+        'c': CInfo,
+        'p2pe': p2peInfo
+    }
+
+    const answersMap : { [key: string]: SecurityQuestion[] } = {
+        'a': answersA,
+        // 'b': answers,
+        'c': answersC,
+        'p2pe': answersP2PE
+    }
+
+    const info: any = infoMap[params.type]
+    const answers: SecurityQuestion[] = answersMap[params.type]
+
     const questions: string[] = questionMap[params.type]
     const [checkedStates, setCheckedStates] = useState(Array(questions.length).fill(""))
     const [autofill, setAutofill] = useState(true)
     const [submit, setSubmit] = useState(false)
+    const [compliant, setCompliant] = useState(false)
 
     const testFillAnswers = () => {
         const testAnswers = Array(questions.length)
@@ -65,7 +101,6 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
         if (!answeredAll() && triggerAlertElement) 
             triggerAlertElement.click();
 
-        const saq_type = params.type
         answerMap = {
             "Yes": [],
             "No": [],
@@ -75,8 +110,9 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
         checkedStates.map((c, i) => {
             answerMap[c].push(i + 1);
         })
-
+        
         setSubmit(true)
+        setCompliant(answerMap["No"].length === 0)
     }
 
     const fetchRelatedQuestions = async (i: number) => {
@@ -131,11 +167,50 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
 
     return (
         <main className="flex flex-col items-center justify-between p-12 w-100 pt-0">
+            <Label className="opacity-50 font-bold m-5">PCI DSS Compliance Assessment and Testing Report: An Overview of Compliance Status</Label>
             {submit && <>
-                <div>
-                    
-                </div>
-            </>}
+                <Accordion type="multiple" defaultValue={['overview', 'status']} className="w-full m-10">
+                    <AccordionItem value="overview">
+                        <AccordionTrigger className="text-base">Overview</AccordionTrigger>
+                        <AccordionContent className="text-sm">
+                            {info.overview}
+                        </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="status">
+                        <AccordionTrigger className="text-base">Compilance Status</AccordionTrigger>
+                        <AccordionContent className="text-sm">
+                            {compliant ? info.compliant : info.nonCompliant}
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
+
+                <Table className="w-100 m-10">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[45vw]">Question</TableHead>
+                                <TableHead className="w-[18vw]">Status</TableHead>
+                                <TableHead className="w-[30vw]">Remediation</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {
+                                questions.filter ((q, i) => checkedStates[i] === "No").map((q, j) => (
+                                    <TableRow key={q}>
+                                        <TableCell className="font-medium">{q}</TableCell>
+                                        <TableCell className="font-medium">
+                                            <div className="flex items-center space-x-2">
+                                                <Text size="1.5rem" className="text-red-300"><i className="fas fa-times-circle"></i></Text>
+                                                <Label className="font-medium">Non-Compliant</Label>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell className="font-medium">{answers[j].remediation}</TableCell>
+                                    </TableRow>
+                                ))
+                            }
+                        </TableBody>
+                    </Table>
+            </>
+            }
             {!submit && <>
             <div className="flex m-5">
                 <div className="flex flex-col items-center justify-center">
