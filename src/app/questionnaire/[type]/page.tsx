@@ -21,6 +21,12 @@ import {
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { a, b, c, p2pe } from '../../../data/questions'
+
+import { answersP2PE } from '@/data/p2pe/answers'
+import { answersA } from '@/data/saqa/answers'
+import { answersC } from '@/data/saqc/answers'
+// import { p2peInfo } from '@/data/p2pe/info'
+
 import { useCallback, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
@@ -54,6 +60,17 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
         const triggerAlertElement = document.getElementById("triggerAlertQuestionnaire");
         if (!answeredAll() && triggerAlertElement) 
             triggerAlertElement.click();
+
+        const saq_type = params.type
+        let answerMap: { [key: string]: number[] } = {
+            "Yes": [],
+            "No": [],
+            "NA": []
+        }
+        
+        checkedStates.map((c, i) => {
+            answerMap[c].push(i + 1);
+        })
     }
 
     const fetchRelatedQuestions = async (i: number) => {
