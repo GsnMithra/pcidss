@@ -30,8 +30,11 @@ import { answersC } from '@/data/saqc/answers'
 import { useCallback, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
+import { useRouter } from 'next/navigation'
 
 export default function Questionnaire({ params }: { params: { type: string } }) {
+    const router = useRouter();
+    let answerMap: { [key: string]: number[] } = {};
     const questionMap : { [key: string]: string[] } = {
         'a': a,
         'b': b,
@@ -41,6 +44,7 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
     const questions: string[] = questionMap[params.type]
     const [checkedStates, setCheckedStates] = useState(Array(questions.length).fill(""))
     const [autofill, setAutofill] = useState(true)
+    const [submit, setSubmit] = useState(false)
 
     const testFillAnswers = () => {
         const testAnswers = Array(questions.length)
@@ -62,7 +66,7 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
             triggerAlertElement.click();
 
         const saq_type = params.type
-        let answerMap: { [key: string]: number[] } = {
+        answerMap = {
             "Yes": [],
             "No": [],
             "NA": []
@@ -71,6 +75,8 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
         checkedStates.map((c, i) => {
             answerMap[c].push(i + 1);
         })
+
+        setSubmit(true)
     }
 
     const fetchRelatedQuestions = async (i: number) => {
@@ -124,7 +130,13 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
     }, []);
 
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-12 w-100 pt-0">
+        <main className="flex flex-col items-center justify-between p-12 w-100 pt-0">
+            {submit && <>
+                <div>
+                    
+                </div>
+            </>}
+            {!submit && <>
             <div className="flex m-5">
                 <div className="flex flex-col items-center justify-center">
                     <Label className="font-bold opacity-50 p-5">Questionnaire {params.type.toUpperCase()}</Label>
@@ -171,6 +183,7 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
             <div>
                 <Button onClick={handleSubmit}>Submit</Button>
             </div>
+            </>}
             <AlertDialog>
                 <AlertDialogTrigger>
                     <div className="flex" id="triggerAlertQuestionnaire">
