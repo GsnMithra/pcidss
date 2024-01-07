@@ -42,7 +42,7 @@ def autofill():
     saq_mapper = { 'a': a, 'b': b, 'c': c, 'p2pe': p2pe }
     
     result = predictRelatedQuestions(question, saq_mapper[saq_type])
-    result = [r for r in result if r > int(question[1:])]
+    result = [r for r in result]
     return jsonify(result)
 
 app.run(host='0.0.0.0',port=6969, debug=True)

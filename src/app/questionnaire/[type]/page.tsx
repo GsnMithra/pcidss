@@ -1,6 +1,5 @@
 "use client"
 
-import { Label } from '@/components/ui/label'
 import { 
     Table, 
     TableBody, 
@@ -9,12 +8,22 @@ import {
     TableHeader, 
     TableRow
 } from '@/components/ui/table'
+import { 
+    AlertDialog, 
+    AlertDialogCancel, 
+    AlertDialogContent, 
+    AlertDialogDescription, 
+    AlertDialogFooter, 
+    AlertDialogHeader, 
+    AlertDialogTitle, 
+    AlertDialogTrigger 
+} from '@/components/ui/alert-dialog'
+import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { a, b, c, p2pe } from '../../../data/questions'
 import { useCallback, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
-import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 
 export default function Questionnaire({ params }: { params: { type: string } }) {
     const questionMap : { [key: string]: string[] } = {
@@ -74,7 +83,7 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
             
             if (autofill) {
                 data.forEach((d: number) => {
-                    if (d - 1 > i && newStates[d - 1] === "")
+                    if (newStates[d - 1] === "")
                         newStates[d - 1] = selected;
                 });
             }
