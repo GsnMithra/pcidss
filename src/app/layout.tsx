@@ -3,6 +3,7 @@ import { Work_Sans } from 'next/font/google'
 import './globals.css'
 import { cn } from '@/lib/utils'
 import { ThemeProvider } from '@/components/theme-provider' 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 export const fontSans = Work_Sans({
   subsets: ["latin"],
@@ -35,6 +36,10 @@ export default function RootLayout({
                       PCI-DSS v4.0
                     </div></a>
                 </div>
+                <Avatar className="absolute right-6 top-5">
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>Org</AvatarFallback>
+                </Avatar>
             </div>
         </div>
       </nav>
