@@ -29,7 +29,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { a, b, c, p2pe } from '../../../data/questions'
 
 import { answersA } from "@/data/saqa/answers"
-// import { answersB } from "@/data/saqb/answers"
+import { answersB } from "@/data/saqb/answers"
 import { answersC } from "@/data/saqc/answers"
 import { answersP2PE } from "@/data/p2pe/answers"
 
@@ -38,10 +38,11 @@ import { BInfo } from '@/data/saqb/info'
 import { CInfo } from '@/data/saqc/info'
 import { p2peInfo } from '@/data/p2pe/info';
 
-import { useCallback, useEffect, useState } from 'react'
+import { use, useCallback, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import { Text } from "lucide-react"
+import { Progress } from "@/components/ui/progress"
 
 interface SecurityQuestion {
     question: string;
@@ -54,7 +55,7 @@ interface SecurityQuestion {
 export default function Questionnaire({ params }: { params: { type: string } }) {
     const allMap : { [key: string]: [ string[], any, SecurityQuestion[] ] } = {
         'a': [ a, AInfo, answersA ],
-        'b': [ b, BInfo, [] ],
+        'b': [ b, BInfo, answersB ],
         'c': [ c, CInfo, answersC ],
         'p2pe': [ p2pe, p2peInfo, answersP2PE ]
     }
@@ -67,7 +68,9 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
     const [autofill, setAutofill] = useState(true)
     const [submit, setSubmit] = useState(false)
     const [compliant, setCompliant] = useState(false)
-    const [domainMap, setDomainMap] = useState(new Map<string, SecurityQuestion[]>())
+    const [domainMapper, setDomainMap] = useState(new Map<string, SecurityQuestion[]>())
+    const [totalCompliancePercentage, setTotalCompliancePercentage] = useState(0)
+    const [domainCompliance, setDomainComplianceMap] = useState(new Map<string, number>())
 
     const testFillAnswers = (filling: number) => {
         const testAnswers = Array(questions.length)
@@ -96,18 +99,36 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
         
         let nonCompliantQuestions: SecurityQuestion[] = []
         questions.filter ((q, i) => checkedStates[i] === "No")
-        .map((q, j) => (
+        .map((_, j) => (
             nonCompliantQuestions.push (answers[j])
         ))
 
         let domainMap = new Map<string, SecurityQuestion[]>()
-        nonCompliantQuestions.forEach((q) => {
-            if (domainMap.has(q.domain))
-                domainMap.get(q.domain)?.push(q)
+        let domainComplianceMap = new Map<string, number>()
+        let perDomain = new Map<string, number>()
+        answers.forEach((q) => {
+            if (perDomain.has(q.domain))
+                perDomain.set(q.domain, perDomain.get(q.domain)! + 1)
             else
-                domainMap.set(q.domain, [q])
+                perDomain.set(q.domain, 1)
         })
 
+        nonCompliantQuestions.forEach((q) => {
+            if (domainMap.has(q.domain)) {
+                domainMap.get(q.domain)?.push(q)
+                domainComplianceMap.set(q.domain, domainComplianceMap.get(q.domain)! + 1)
+            }
+            else {
+                domainMap.set(q.domain, [q])
+                domainComplianceMap.set(q.domain, 1)
+            }
+        })
+
+        perDomain.forEach((v, k) => {
+            domainCompliance.set (k, (domainComplianceMap.get(k) || 0) / v * 100)
+        })
+        
+        setTotalCompliancePercentage(((questions.length - nonCompliantQuestions.length) / questions.length) * 100)
         setDomainMap(domainMap)
         setSubmit(true)
         setCompliant(nonCompliantQuestions.length === 0)
@@ -178,33 +199,50 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
                     className="w-full m-10 p-10 mt-5 mb-10 pt-0 pb-0"
                     >
                     <AccordionItem value="overview">
-                        <AccordionTrigger className="font-bold text-base opacity-70">Overview</AccordionTrigger>
-                        <AccordionContent className="text-lg opacity-50">
-                            {info.overview}
+                        <AccordionTrigger className="font-bold text-base opacity-65">Overview</AccordionTrigger>
+                        <AccordionContent className="text-base opacity-55">
+                            <div className="m-5">
+                                {info.overview}
+                            </div>
                         </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="status">
-                        <AccordionTrigger className="font-bold text-base opacity-70">Compilance Status</AccordionTrigger>
-                        <AccordionContent className="text-lg opacity-50">
-                            {compliant ? info.compliant : info.nonCompliant}
+                        <AccordionTrigger className="font-bold text-base opacity-65">Compilance Status</AccordionTrigger>
+                        <AccordionContent className="opacity-55 text-base">
+                            <div className="m-4">
+                                {compliant ? info.compliant : info.nonCompliant}
+                            </div>
+                            <div className="flex items-center justify-center">
+                                <Progress value={totalCompliancePercentage} className="m-10 w-96 mr-3"/>
+                                <Label className="opacity-50 font-bold m-3 ml-3 text-sm">{totalCompliancePercentage.toFixed(2)}%</Label>
+                            </div>
                         </AccordionContent>
                     </AccordionItem>
                 </Accordion>}
                 {!compliant && <Accordion
+                    defaultValue="status"
                     collapsible
                     type="single"
                     className="w-full m-10 p-10 mt-5 mb-10 pt-0 pb-0"
                     >
                     <AccordionItem value="overview">
-                        <AccordionTrigger className="font-bold text-base opacity-70">Overview</AccordionTrigger>
-                        <AccordionContent className="text-lg opacity-50">
-                            {info.overview}
+                        <AccordionTrigger className="font-bold text-base opacity-65">Overview</AccordionTrigger>
+                        <AccordionContent className="text-base opacity-55">
+                            <div className="m-5">
+                                {info.overview}
+                            </div>
                         </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="status">
-                        <AccordionTrigger className="font-bold text-base opacity-70">Compilance Status</AccordionTrigger>
-                        <AccordionContent className="text-lg opacity-50">
-                            {compliant ? info.compliant : info.nonCompliant}
+                        <AccordionTrigger className="font-bold text-base opacity-65">Compilance Status</AccordionTrigger>
+                        <AccordionContent className="opacity-55 text-base">
+                            <div className="m-4">
+                                {compliant ? info.compliant : info.nonCompliant}
+                            </div>
+                            <div className="flex items-center justify-center">
+                                <Progress value={totalCompliancePercentage} className="m-10 w-96 mr-3"/>
+                                <Label className="opacity-50 font-bold m-3 ml-3 text-sm">{totalCompliancePercentage.toFixed(2)}%</Label>
+                            </div>
                         </AccordionContent>
                     </AccordionItem>
                 </Accordion>}
@@ -223,35 +261,52 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {/* {nonCompliant.map(q => (
-                            <TableRow key={q.question}>
-                                <TableCell className="font-medium p-5">
-                                    <div className="flex items-center space-x-2">
-                                        <Text size="1.5rem" className="text-red-300"><i className="fas fa-times-circle"></i></Text>
-                                    </div>
-                                    {q.question}
-                                </TableCell>
-                                <TableCell className="font-medium p-5">
-                                    {q.remediation}
-                                </TableCell>
-                            </TableRow>
-                        ))} */}
                         {
-                            domainMap.size > 0 && Array.from(domainMap.keys()).map((domain) => (
+                            domainMapper.size > 0 && Array.from(domainMapper.keys()).map((domain) => (
                                 <TableRow key={domain}>
-                                    <TableCell className="font-medium p-5">
-                                        {/* <div className="flex items-center space-x-2">
-                                            <Text size="1.5rem" className="text-red-300"><i className="fas fa-times-circle"></i></Text>
-                                        </div> */}
-                                        {domain}
+                                    <TableCell className="font-bold p-5 opacity-65">
+                                        <div>
+                                            {domain}
+                                        </div>
+                                        <div>
+                                            <Progress value={100 - (domainCompliance.get(domain) || 0)} className="m-5 w-96"/>
+                                        </div>
                                     </TableCell>
                                     <TableCell className="font-medium p-10">
-                                        <Accordion type="multiple" className="w-full">
-                                            {domainMap.get(domain)?.map((q) => (
+                                        <Accordion type="multiple" className="w-full" defaultValue={domainMapper.get(domain)?.map((q) => q.question)}>
+                                            {domainMapper.get(domain)?.map((q) => (
                                                 <AccordionItem key={q.question} value={q.question} className="border-0">
-                                                    <AccordionTrigger className="text-base">{q.question}</AccordionTrigger>
+                                                    <AccordionTrigger className="text-base font-medium">{q.question}</AccordionTrigger>
                                                     <AccordionContent className="text-sm ml-5">
-                                                        {q.remediation}
+                                                        <div className="flex items-start justify-center flex-col opacity-50">
+                                                            <div className="flex gap-1">
+                                                                <div>
+                                                                    <b>Requirement:</b>
+                                                                </div>
+                                                                <div>
+                                                                    {q.requirement}
+                                                                </div>
+
+                                                            </div>
+                                                            <div className="flex gap-1">
+                                                                <div>
+                                                                    <b>Issue:</b>
+                                                                </div>
+                                                                <div>
+                                                                    {q.issueIfNotCompliant}
+                                                                </div>
+
+                                                            </div>
+                                                            <div className="flex gap-1">
+                                                                <div>
+                                                                    <b>Remediation:</b>
+                                                                </div>
+                                                                <div>
+                                                                    {q.remediation}
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
                                                     </AccordionContent>
                                                 </AccordionItem>
                                             ))}
@@ -271,9 +326,9 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
                     <div className="flex m-3 items-center justify-center gap-5">
                         <Label className="font-medium opacity-35">Auto Fill</Label>
                         <Switch checked={autofill} onCheckedChange={() => {setAutofill(!autofill)}}/>
-                        <Button onClick={() => testFillAnswers (0)}>Random (development/testing) Yes</Button>
-                        <Button onClick={() => testFillAnswers (1)}>Random (development/testing) No</Button>
-                        <Button onClick={() => testFillAnswers (2)}>Random (development/testing) Random</Button>
+                        <Button onClick={() => testFillAnswers (0)}>Yes</Button>
+                        <Button onClick={() => testFillAnswers (1)}>No</Button>
+                        <Button onClick={() => testFillAnswers (2)}>Random</Button>
                     </div>
                     <Table className="w-100">
                         <TableHeader>
