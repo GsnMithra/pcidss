@@ -1,5 +1,7 @@
 "use client"
 
+import { Separator } from "@/components/ui/separator"
+import { Badge } from "@/components/ui/badge"
 import {
     Accordion,
     AccordionContent,
@@ -70,7 +72,7 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
     const [compliant, setCompliant] = useState(false)
     const [domainMapper, setDomainMap] = useState(new Map<string, SecurityQuestion[]>())
     const [totalCompliancePercentage, setTotalCompliancePercentage] = useState(0)
-    const [domainCompliance, setDomainComplianceMap] = useState(new Map<string, number>())
+    const [domainCompliance, _] = useState(new Map<string, number>())
 
     const testFillAnswers = (filling: number) => {
         const testAnswers = Array(questions.length)
@@ -200,20 +202,16 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
                     <AccordionItem value="overview">
                         <AccordionTrigger className="font-bold text-base opacity-65">Overview</AccordionTrigger>
                         <AccordionContent className="text-base opacity-55">
-                            <div className="m-5">
-                                {info.overview}
-                            </div>
+                            <div className="m-5">{info.overview}</div>
                         </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="status">
                         <AccordionTrigger className="font-bold text-base opacity-65">Compilance Status</AccordionTrigger>
                         <AccordionContent className="opacity-55 text-base">
-                            <div className="m-4">
-                                {compliant ? info.compliant : info.nonCompliant}
-                            </div>
+                            <div className="m-4">{compliant ? info.compliant : info.nonCompliant}</div>
                             <div className="flex items-center justify-center">
                                 <Progress value={totalCompliancePercentage} className="m-10 w-96 mr-3"/>
-                                <Label className="opacity-50 font-bold m-3 ml-3 text-sm">{totalCompliancePercentage.toFixed(2)}%</Label>
+                                <Label className="opacity-50 font-bold m-3 ml-3 text-sm">{totalCompliancePercentage.toFixed(1)}%</Label>
                             </div>
                         </AccordionContent>
                     </AccordionItem>
@@ -227,20 +225,16 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
                     <AccordionItem value="overview">
                         <AccordionTrigger className="font-bold text-base opacity-65">Overview</AccordionTrigger>
                         <AccordionContent className="text-base opacity-55">
-                            <div className="m-5">
-                                {info.overview}
-                            </div>
+                            <div className="m-5">{info.overview}</div>
                         </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="status">
                         <AccordionTrigger className="font-bold text-base opacity-65">Compilance Status</AccordionTrigger>
                         <AccordionContent className="opacity-55 text-base">
-                            <div className="m-4">
-                                {compliant ? info.compliant : info.nonCompliant}
-                            </div>
+                            <div className="m-4">{compliant ? info.compliant : info.nonCompliant}</div>
                             <div className="flex items-center justify-center">
                                 <Progress value={totalCompliancePercentage} className="m-10 w-96 mr-3"/>
-                                <Label className="opacity-50 font-bold m-3 ml-3 text-sm">{totalCompliancePercentage.toFixed(2)}%</Label>
+                                <Label className="opacity-50 font-bold m-3 ml-3 text-sm">{totalCompliancePercentage.toFixed(1)}%</Label>
                             </div>
                         </AccordionContent>
                     </AccordionItem>
@@ -264,46 +258,36 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
                             domainMapper.size > 0 && Array.from(domainMapper.keys()).map((domain) => (
                                 <TableRow key={domain}>
                                     <TableCell className="font-bold p-5 opacity-65">
-                                        <div>
-                                            {domain}
-                                        </div>
-                                        <div>
-                                            <Progress value={100 - (domainCompliance.get(domain) || 0)} className="m-5 w-96"/>
+                                        <div className="flex flex-col items-center justify-center">
+                                            <div>{domain}</div>
+                                            <div className="flex flex-row items-center justify-center">
+                                                <Progress value={100 - (domainCompliance.get(domain) || 0)} className="m-5 w-52"/>
+                                                <Label className="opacity-50 font-bold m-3 ml-3 text-sm">{(100 - (domainCompliance.get(domain) || 0)).toFixed(1)}%</Label>
+                                            </div>
                                         </div>
                                     </TableCell>
                                     <TableCell className="font-medium p-10">
                                         <Accordion type="multiple" className="w-full" defaultValue={domainMapper.get(domain)?.map((q) => q.question)}>
                                             {domainMapper.get(domain)?.map((q) => (
                                                 <AccordionItem key={q.question} value={q.question} className="border-0">
-                                                    <AccordionTrigger className="text-base font-medium">{q.question}</AccordionTrigger>
+                                                    <AccordionTrigger className="text-base font-medium"><q>{q.question}</q></AccordionTrigger>
                                                     <AccordionContent className="text-sm ml-5">
-                                                        <div className="flex items-start justify-center flex-col opacity-50">
-                                                            <div className="flex gap-1">
+                                                        <div className="flex items-start justify-center flex-row opacity-50 gap-10 m-5">
+                                                            <div className="flex gap-3 items-center justify-center flex-col w-1/5">
                                                                 <div>
-                                                                    <b>Requirement:</b>
+                                                                    <b>Requirement(s)</b>
+                                                                    <div className="flex flex-row gap-2 items-center justify-center m-3">{q.requirement.split(", ").map((r: string) => <div key={r}><Badge>{r}</Badge></div>)}</div>
                                                                 </div>
-                                                                <div>
-                                                                    {q.requirement}
-                                                                </div>
-
                                                             </div>
-                                                            <div className="flex gap-1">
-                                                                <div>
-                                                                    <b>Issue:</b>
-                                                                </div>
-                                                                <div>
-                                                                    {q.issueIfNotCompliant}
-                                                                </div>
-
+                                                            <Separator orientation="vertical" className="h-20"/>
+                                                            <div className="flex gap-3 items-center justify-center flex-col w-1/2">
+                                                                <div><b>Issue</b></div>
+                                                                <div>{q.issueIfNotCompliant}</div>
                                                             </div>
-                                                            <div className="flex gap-1">
-                                                                <div>
-                                                                    <b>Remediation:</b>
-                                                                </div>
-                                                                <div>
-                                                                    {q.remediation}
-                                                                </div>
-
+                                                            <Separator orientation="vertical" className="h-20"/>
+                                                            <div className="flex gap-3 items-center justify-center flex-col w-1/2">
+                                                                <div><b>Remediation</b></div>
+                                                                <div>{q.remediation}</div>
                                                             </div>
                                                         </div>
                                                     </AccordionContent>
