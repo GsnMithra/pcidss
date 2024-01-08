@@ -98,14 +98,15 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
             triggerAlertElement.click();
         
         let nonCompliantQuestions: SecurityQuestion[] = []
-        questions.filter ((q, i) => checkedStates[i] === "No")
-        .map((_, j) => (
-            nonCompliantQuestions.push (answers[j])
-        ))
+        checkedStates.forEach((c, i) => {
+            if (c === "No") 
+                nonCompliantQuestions.push(answers[i])
+        })
 
         let domainMap = new Map<string, SecurityQuestion[]>()
         let domainComplianceMap = new Map<string, number>()
         let perDomain = new Map<string, number>()
+
         answers.forEach((q) => {
             if (perDomain.has(q.domain))
                 perDomain.set(q.domain, perDomain.get(q.domain)! + 1)
@@ -124,10 +125,8 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
             }
         })
 
-        perDomain.forEach((v, k) => {
-            domainCompliance.set (k, (domainComplianceMap.get(k) || 0) / v * 100)
-        })
-        
+        perDomain.forEach((v, k) => {domainCompliance.set (k, (domainComplianceMap.get(k) || 0) / v * 100)})
+
         setTotalCompliancePercentage(((questions.length - nonCompliantQuestions.length) / questions.length) * 100)
         setDomainMap(domainMap)
         setSubmit(true)
