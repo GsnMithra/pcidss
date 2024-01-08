@@ -1,9 +1,13 @@
 import type { Metadata } from 'next'
 import { Work_Sans } from 'next/font/google'
+
 import './globals.css'
 import { cn } from '@/lib/utils'
+
 import { ThemeProvider } from '@/components/theme-provider' 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
+import SessionProvider from "@/user-components/sessionprovider";
+import { getServerSession } from 'next-auth'
 
 export const fontSans = Work_Sans({
   subsets: ["latin"],
@@ -15,11 +19,14 @@ export const metadata: Metadata = {
   description: 'PCI-PCI DSS v4.0'
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+
+  const session = await getServerSession()
+
   return (
     <html lang="en">
       <body
@@ -36,10 +43,6 @@ export default function RootLayout({
                       PCI-DSS v4.0
                     </div></a>
                 </div>
-                <Avatar className="absolute right-6 top-5">
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>Org</AvatarFallback>
-                </Avatar>
             </div>
         </div>
       </nav>
@@ -49,7 +52,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-          {children}
+            <SessionProvider session={session}>{children}</SessionProvider>
         </ThemeProvider>
       </body>
     </html>

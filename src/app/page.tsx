@@ -1,11 +1,24 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import Navbar from "@/user-components/navbar"
+import { useSession } from "next-auth/react"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 
 export default function Home() {
+  const { data: session } = useSession()
+
+  if (!session)
+    redirect ('/login')
+
   return (
     <main className="flex flex-col items-center justify-between p-12 w-100">
+      <div className="absolute top-5 right-6">
+        <Navbar />
+      </div>
       <div className="flex items-center justify-center text-auto font-medium text-xl self-start flex-col gap-20">
         <div className="flex justify-center items-center flex-col">
           <Label className="font-bold opacity-50">Determine Your PCI DSS v4.0 SAQ Type: A Guide for Merchants</Label>

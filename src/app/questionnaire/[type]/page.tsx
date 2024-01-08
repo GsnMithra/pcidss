@@ -40,11 +40,14 @@ import { BInfo } from '@/data/saqb/info'
 import { CInfo } from '@/data/saqc/info'
 import { p2peInfo } from '@/data/p2pe/info';
 
-import { use, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import { Text } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
+import Navbar from "@/user-components/navbar"
+import { useSession } from "next-auth/react"
+import { redirect } from "next/navigation"
 
 interface SecurityQuestion {
     question: string;
@@ -55,6 +58,11 @@ interface SecurityQuestion {
 }
 
 export default function Questionnaire({ params }: { params: { type: string } }) {
+
+    const { data: session } = useSession()
+    if (!session)
+        redirect ('/login')
+
     const allMap : { [key: string]: [ string[], any, SecurityQuestion[] ] } = {
         'a': [ a, AInfo, answersA ],
         'b': [ b, BInfo, answersB ],
@@ -192,6 +200,9 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
 
     return (
         <main className="flex flex-col items-center justify-between p-12 w-100 pt-0">
+            <div className="absolute top-5 right-6">
+                <Navbar />
+            </div>
             <Label className="opacity-50 font-bold m-5">PCI DSS Compliance Assessment and Testing Report: An Overview of Compliance Status</Label>
             {submit && <>
                 {compliant && <Accordion
@@ -199,13 +210,13 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
                     defaultValue={["overview", "status"]}
                     className="w-full m-10 p-10 mt-5 mb-10 pt-0 pb-0"
                     >
-                    <AccordionItem value="overview">
+                    <AccordionItem value="overview" className="border-0">
                         <AccordionTrigger className="font-bold text-base opacity-65">Overview</AccordionTrigger>
                         <AccordionContent className="text-base opacity-55">
                             <div className="m-5">{info.overview}</div>
                         </AccordionContent>
                     </AccordionItem>
-                    <AccordionItem value="status">
+                    <AccordionItem value="status" className="border-0">
                         <AccordionTrigger className="font-bold text-base opacity-65">Compilance Status</AccordionTrigger>
                         <AccordionContent className="opacity-55 text-base">
                             <div className="m-4">{compliant ? info.compliant : info.nonCompliant}</div>
@@ -216,19 +227,20 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
                         </AccordionContent>
                     </AccordionItem>
                 </Accordion>}
-                {!compliant && <Accordion
-                    defaultValue="status"
-                    collapsible
-                    type="single"
-                    className="w-full m-10 p-10 mt-5 mb-10 pt-0 pb-0"
+                {!compliant && 
+                    <Accordion
+                        defaultValue="status"
+                        collapsible
+                        type="single"
+                        className="w-full m-10 p-10 mt-5 mb-10 pt-0 pb-0"
                     >
-                    <AccordionItem value="overview">
+                    <AccordionItem value="overview" className="border-0">
                         <AccordionTrigger className="font-bold text-base opacity-65">Overview</AccordionTrigger>
                         <AccordionContent className="text-base opacity-55">
                             <div className="m-5">{info.overview}</div>
                         </AccordionContent>
                     </AccordionItem>
-                    <AccordionItem value="status">
+                    <AccordionItem value="status" className="border-0">
                         <AccordionTrigger className="font-bold text-base opacity-65">Compilance Status</AccordionTrigger>
                         <AccordionContent className="opacity-55 text-base">
                             <div className="m-4">{compliant ? info.compliant : info.nonCompliant}</div>
@@ -239,6 +251,7 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
                         </AccordionContent>
                     </AccordionItem>
                 </Accordion>}
+                {!compliant && <Separator orientation="horizontal" className="max-w-10xl"/>}
 
                 {!compliant && <div className="flex items-center justify-center mt-10 mb-0">
                     <Label className="opacity-50 font-bold m-3 text-base">Non-Compliant</Label>
