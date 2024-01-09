@@ -27,13 +27,15 @@ import { useSession, signOut } from "next-auth/react"
 import { redirect } from "next/navigation"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 function Navbar() {
     const { data: session } = useSession()
     const [organizationName, setOrganizationName] = useState("")
-    if (!session)
-        redirect ('/api/auth/signin')
+    useEffect(() => {
+        if (!session)
+            redirect ('/login')
+    }, [session])
 
     return (
         <main>
@@ -63,9 +65,9 @@ function Navbar() {
                         <div className="flex m-7 ml-0 mr-0 items-center justify-center gap-4 flex-col">
                             <div className="flex items-center justify-center flex-row gap-3">
                                 <Label>Org. Name</Label>
-                                <Input />
+                                <Input onChange={(e) => setOrganizationName(e.target.value)} value={organizationName}/>
                             </div>
-                            <Button variant="outline" className="m-5 ml-0 mr-0 mt-0">Save</Button>
+                            <Button variant="outline" className="m-5 ml-0 mr-0 mt-0" onClick={() => { if (session?.user) session.user.organizationName = organizationName }}>Save</Button>
                         </div>
                     </SheetDescription>
                     </SheetHeader>

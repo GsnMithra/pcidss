@@ -11,11 +11,14 @@ import {
 } from "@/components/ui/card"
 import Image from "next/image"
 import { Separator } from "@/components/ui/separator"
+import { useEffect } from "react"
 
 function Login() {
     const { data: session } = useSession()
-    if (session)
-        redirect('/')
+    useEffect(() => {
+        if (session)
+            redirect ('/')
+    }, [session])
 
     const handleLogin = async (provider: string) => {
         await signIn(provider, {redirect: false})
@@ -30,14 +33,14 @@ function Login() {
                 </CardHeader>
                 <Separator orientation="horizontal" className="w-auto m-10 mt-0"/>
                 <CardContent className="flex flex-row gap-5">
-                    <Card className="cursor-pointer" onClick={() => handleLogin("google")}>
+                    <Card className="cursor-pointer" onClick={async () => await handleLogin("google")}>
                         <div className="flex items-center justify-center m-10">
                             <Image src="https://authjs.dev/img/providers/google.svg" alt="Google" width={40} height={40} />
                         </div>
                     </Card>
-                    <Card className="cursor-pointer" onClick={() => handleLogin("github")}>
+                    <Card className="cursor-pointer" onClick={async () => await handleLogin("github")}>
                         <div className="flex items-center justify-center m-10">
-                            <Image src="https://authjs.dev/img/providers/github.svg" alt="Google" width={40} height={40} />
+                            <Image src="https://authjs.dev/img/providers/github.svg" alt="Github" width={40} height={40} />
                         </div>
                     </Card>
                 </CardContent>

@@ -60,8 +60,10 @@ interface SecurityQuestion {
 export default function Questionnaire({ params }: { params: { type: string } }) {
 
     const { data: session } = useSession()
-    if (!session)
-        redirect ('/login')
+    useEffect(() => {
+        if (!session)
+            redirect ('/login')
+    }, [session])
 
     const allMap : { [key: string]: [ string[], any, SecurityQuestion[] ] } = {
         'a': [ a, AInfo, answersA ],
@@ -81,6 +83,9 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
     const [domainMapper, setDomainMap] = useState(new Map<string, SecurityQuestion[]>())
     const [totalCompliancePercentage, setTotalCompliancePercentage] = useState(0)
     const [domainCompliance, _] = useState(new Map<string, number>())
+    const [overview, setOverview] = useState("")
+    const [compliantText, setCompliantText] = useState("")
+    const [nonCompliantText, setNonCompliantText] = useState("")
 
     const testFillAnswers = (filling: number) => {
         const testAnswers = Array(questions.length)
@@ -116,6 +121,17 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
         let domainMap = new Map<string, SecurityQuestion[]>()
         let domainComplianceMap = new Map<string, number>()
         let perDomain = new Map<string, number>()
+
+        let overviewUnprocessed = info.overview
+        let compliantTextUnprocessed = info.compliant
+        let nonCompliantTextUnprocessed = info.nonCompliant
+        overviewUnprocessed = overviewUnprocessed.replace("{...}", session?.user.organizationName)
+        compliantTextUnprocessed = compliantTextUnprocessed.replace("{...}", session?.user.organizationName)
+        nonCompliantTextUnprocessed = nonCompliantTextUnprocessed.replace("{...}", session?.user.organizationName)
+
+        setOverview(overviewUnprocessed)
+        setCompliantText(compliantTextUnprocessed)
+        setNonCompliantText(nonCompliantTextUnprocessed)
 
         answers.forEach((q) => {
             if (perDomain.has(q.domain))
@@ -213,13 +229,13 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
                     <AccordionItem value="overview" className="border-0">
                         <AccordionTrigger className="font-bold text-base opacity-65">Overview</AccordionTrigger>
                         <AccordionContent className="text-base opacity-55">
-                            <div className="m-5">{info.overview}</div>
+                            <div className="m-5">{overview}</div>
                         </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="status" className="border-0">
                         <AccordionTrigger className="font-bold text-base opacity-65">Compilance Status</AccordionTrigger>
                         <AccordionContent className="opacity-55 text-base">
-                            <div className="m-4">{compliant ? info.compliant : info.nonCompliant}</div>
+                            <div className="m-4">{compliant ? compliantText : nonCompliantText}</div>
                             <div className="flex items-center justify-center">
                                 <Progress value={totalCompliancePercentage} className="m-10 w-96 mr-3"/>
                                 <Label className="opacity-50 font-bold m-3 ml-3 text-sm">{totalCompliancePercentage.toFixed(1)}%</Label>
@@ -237,13 +253,13 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
                     <AccordionItem value="overview" className="border-0">
                         <AccordionTrigger className="font-bold text-base opacity-65">Overview</AccordionTrigger>
                         <AccordionContent className="text-base opacity-55">
-                            <div className="m-5">{info.overview}</div>
+                            <div className="m-5">{overview}</div>
                         </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="status" className="border-0">
                         <AccordionTrigger className="font-bold text-base opacity-65">Compilance Status</AccordionTrigger>
                         <AccordionContent className="opacity-55 text-base">
-                            <div className="m-4">{compliant ? info.compliant : info.nonCompliant}</div>
+                            <div className="m-4">{compliant ? compliantText : nonCompliantText}</div>
                             <div className="flex items-center justify-center">
                                 <Progress value={totalCompliancePercentage} className="m-10 w-96 mr-3"/>
                                 <Label className="opacity-50 font-bold m-3 ml-3 text-sm">{totalCompliancePercentage.toFixed(1)}%</Label>
