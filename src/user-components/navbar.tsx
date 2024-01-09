@@ -46,7 +46,7 @@ function Navbar() {
                 <div>
                     <Avatar>
                         <AvatarImage src={session?.user?.image ?? ""} />
-                        <AvatarFallback>Org</AvatarFallback>
+                        <AvatarFallback>{session?.user?.name?.charAt(0).toUpperCase()}</AvatarFallback>
                     </Avatar>
                 </div>
             </DropdownMenuTrigger>

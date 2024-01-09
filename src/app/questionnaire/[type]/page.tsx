@@ -58,13 +58,7 @@ interface SecurityQuestion {
 }
 
 export default function Questionnaire({ params }: { params: { type: string } }) {
-
     const { data: session } = useSession()
-    useEffect(() => {
-        if (!session)
-            redirect ('/login')
-    }, [session])
-
     const allMap : { [key: string]: [ string[], any, SecurityQuestion[] ] } = {
         'a': [ a, AInfo, answersA ],
         'b': [ b, BInfo, answersB ],
@@ -201,6 +195,9 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
     }
 
     useEffect(() => {
+        if (!session)
+            redirect ('/login')
+        
         const handleBeforeUnload = (event: BeforeUnloadEvent) => {
             const confirmationMessage = 'Are you sure you want to leave? Your progress will be lost.'
             event.returnValue = confirmationMessage
@@ -212,7 +209,7 @@ export default function Questionnaire({ params }: { params: { type: string } }) 
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
-    }, []);
+    }, [session]);
 
     return (
         <main className="flex flex-col items-center justify-between p-12 w-100 pt-0">

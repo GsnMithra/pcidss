@@ -24,12 +24,12 @@ export default function Eligibility({ params }: { params: { type: string } }) {
             <div className="absolute top-5 right-6">
                 <Navbar />
             </div>
-            <div>
+            {session && <div>
                 {params.type === 'a' && <QuestionTable name="SAQ A" questions={a} checkList={AChecked} checkerList={setAChecked}/>}
                 {params.type === 'b' && <QuestionTable name="SAQ B" questions={b} checkList={BChecked} checkerList={setBChecked}/>}
                 {params.type === 'c' && <QuestionTable name="SAQ C" questions={c} checkList={CChecked} checkerList={setCChecked}/>}
                 {params.type === 'p2pe' && <QuestionTable name="P2PE" questions={p2pe} checkList={P2PEChecked} checkerList={setP2PEChecked}/>}
-            </div>
+            </div>}
         </main>
     )
 }
