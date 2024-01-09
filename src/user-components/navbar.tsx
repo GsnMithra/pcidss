@@ -3,9 +3,9 @@
 import { Input } from "@/components/ui/input"
 import {
     Sheet,
+    SheetClose,
     SheetContent,
     SheetDescription,
-    SheetFooter,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
@@ -24,21 +24,23 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useSession, signOut } from "next-auth/react"
-import { redirect } from "next/navigation"
+import { useRouter, redirect } from "next/navigation"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 function Navbar() {
     const { data: session } = useSession()
-    const [organizationName, setOrganizationName] = useState("")
+    const [organizationName, setOrganizationName] = useState(session?.user.organizationName)
+    const router = useRouter()
     useEffect(() => {
         if (!session)
             redirect ('/login')
     }, [session])
 
     return (
-        <main>
+        <main className="flex flex-row-reverse gap-3 items-center justify-center">
             <DropdownMenu>
             <DropdownMenuTrigger>
                 <div>
@@ -50,14 +52,15 @@ function Navbar() {
             </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <DropdownMenuLabel>{session?.user?.name}</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onSelect={() => {router.push('/')}}>Home</DropdownMenuItem>
                     <DropdownMenuItem onSelect={() => {document.getElementById('triggerOrgDetails')?.click()}}>Organization Settings</DropdownMenuItem>
+                    <DropdownMenuSeparator />
                     <DropdownMenuItem onSelect={async () => await signOut()}>Log Out</DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
             <Sheet>
                 <SheetTrigger><div id="triggerOrgDetails"></div></SheetTrigger>
-                <SheetContent>
+                <SheetContent side="right">
                     <SheetHeader>
                     <SheetTitle>Edit organization details</SheetTitle>
                     <SheetDescription>
@@ -67,12 +70,23 @@ function Navbar() {
                                 <Label>Org. Name</Label>
                                 <Input onChange={(e) => setOrganizationName(e.target.value)} value={organizationName}/>
                             </div>
-                            <Button variant="outline" className="m-5 ml-0 mr-0 mt-0" onClick={() => { if (session?.user) session.user.organizationName = organizationName }}>Save</Button>
+                            <SheetClose asChild>
+                                <Button className="m-5 ml-0 mr-0 mt-0" onClick={() => {
+                                    if (session)
+                                        session.user.organizationName = organizationName || ""
+                                }}>Save</Button>
+                            </SheetClose>
                         </div>
                     </SheetDescription>
                     </SheetHeader>
                 </SheetContent>
             </Sheet>
+            {(organizationName === "My Organization" || organizationName === "") && <Alert className="w-96" variant="destructive">
+                <AlertTitle>Missing organization details</AlertTitle>
+                <AlertDescription>
+                You have not set your organization details yet. Please set them by clicking on the avatar.
+                </AlertDescription>
+            </Alert>}
         </main>
     )
 }

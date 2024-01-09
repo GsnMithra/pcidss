@@ -2,17 +2,26 @@
 
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead, 
+  TableHeader, 
+  TableRow
+} from "@/components/ui/table"
 import Navbar from "@/user-components/navbar"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
+import { useEffect } from "react"
 
 export default function Home() {
   const { data: session } = useSession()
-
-  if (!session)
-    redirect ('/login')
+  useEffect(() => {
+    if (!session)
+      redirect ('/login')
+  }, [session])
 
   return (
     <main className="flex flex-col items-center justify-between p-12 w-100">
