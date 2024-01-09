@@ -57,7 +57,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How do you monitor your third-party service providers’ compliance status?",
+      "Do you monitor your third-party service providers’ compliance status?",
     domain: "Third-Party Management",
     requirement: "12.8.5",
     issueIfNotCompliant:
@@ -97,7 +97,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How often do you review and update your list of third-party service providers?",
+      "Do you review and update your list of third-party service providers?",
     domain: "Third-Party Management",
     requirement: "12.8.3",
     issueIfNotCompliant:
@@ -144,7 +144,7 @@ export const answersA: SecurityQuestion[] = [
       "Provide regular training to all relevant employees on the incident response plan, including simulations and drills.",
   },
   {
-    question: "How often is the incident response plan tested?",
+    question: "Is the incident response plan tested?",
     domain: "Incident Response",
     requirement: "12.10.3",
     issueIfNotCompliant:
@@ -174,7 +174,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How often are your security policies and procedures reviewed and updated?",
+      "Are your security policies and procedures reviewed and updated?",
     domain: "Policy Management",
     requirement: "12.1.1",
     issueIfNotCompliant:
@@ -204,7 +204,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How do you ensure your third-party service providers apply security patches in a timely manner?",
+      "Do you ensure your third-party service providers apply security patches in a timely manner?",
     domain: "Third-Party Management",
     requirement: "12.8.4",
     issueIfNotCompliant:
@@ -243,7 +243,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How do you ensure that your employees are aware of their roles and responsibilities in securing cardholder data?",
+      "Do you ensure that your employees are aware of their roles and responsibilities in securing cardholder data?",
     domain: "Employee Training",
     requirement: "12.6",
     issueIfNotCompliant:
@@ -279,7 +279,7 @@ export const answersA: SecurityQuestion[] = [
       "Establish formal procedures for granting and revoking access to cardholder data, ensuring access is managed effectively and securely.",
   },
   {
-    question: "How do you manage user identifications and passwords?",
+    question: "Do you manage user identifications and passwords?",
     domain: "Identity Management",
     requirement: "8.1, 8.2",
     issueIfNotCompliant: "Risks of compromised user credentials.",
@@ -331,7 +331,7 @@ export const answersA: SecurityQuestion[] = [
       "Maintain an up-to-date antivirus software program and ensure it is updated regularly to protect against malware threats.",
   },
   {
-    question: "How do you protect your systems against malware?",
+    question: "Do you protect your systems against malware?",
     domain: "Malware Protection",
     requirement: "5.1, 5.3",
     issueIfNotCompliant: "Susceptibility to malware threats.",
@@ -359,7 +359,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How do you ensure physical security at locations where cardholder data is processed?",
+      "Do you ensure physical security at locations where cardholder data is processed?",
     domain: "Physical Security",
     requirement: "9",
     issueIfNotCompliant: "Risk of physical breaches and data theft.",
@@ -396,7 +396,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How do you ensure that cardholder data on electronic media is destroyed when no longer needed?",
+      "Do you ensure that cardholder data on electronic media is destroyed when no longer needed?",
     domain: "Data Disposal",
     requirement: "9.8.2",
     issueIfNotCompliant: "Data remnants leading to potential breaches.",
@@ -414,7 +414,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How do you ensure that cardholder data is not sent via unsecured email channels?",
+      "Do you ensure that cardholder data is not sent via unsecured email channels?",
     domain: "Data Transmission Security",
     requirement: "4.2",
     issueIfNotCompliant:
@@ -442,7 +442,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How do you ensure that cardholder data is only stored for legitimate business needs?",
+      "Do you ensure that cardholder data is only stored for legitimate business needs?",
     domain: "Data Storage",
     requirement: "3.1",
     issueIfNotCompliant: "Storing data without clear business necessity.",
@@ -477,7 +477,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How do you monitor and control all access to your systems and cardholder data?",
+      "Do you monitor and control all access to your systems and cardholder data?",
     domain: "Access Control & Monitoring",
     requirement: "7, 10",
     issueIfNotCompliant: "Potential unauthorized access and security breaches.",
@@ -505,7 +505,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How often do you conduct security awareness training for your employees?",
+      "Do you conduct security awareness training for your employees?",
     domain: "Security Awareness Training",
     requirement: "12.6",
     issueIfNotCompliant:
@@ -532,7 +532,7 @@ export const answersA: SecurityQuestion[] = [
       "Establish and maintain a formal risk assessment process to regularly identify and evaluate security risks.",
   },
   {
-    question: "How often is the risk assessment process conducted?",
+    question: "Is the risk assessment process conducted?",
     domain: "Risk Assessment Frequency",
     requirement: "12.2.1",
     issueIfNotCompliant:
@@ -569,7 +569,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How do you ensure that security policies and operational procedures are followed?",
+      "Do you ensure that security policies and operational procedures are followed?",
     domain: "Policy Enforcement",
     requirement: "12",
     issueIfNotCompliant: "Non-compliance with established security policies.",
@@ -587,7 +587,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How do you ensure the integrity and confidentiality of cardholder data?",
+      "Do you ensure the integrity and confidentiality of cardholder data?",
     domain: "Data Integrity & Confidentiality",
     requirement: "3, 4",
     issueIfNotCompliant:
@@ -669,7 +669,7 @@ export const answersA: SecurityQuestion[] = [
       "Regularly review and update firewall and router configurations to maintain effective network security.",
   },
   {
-    question: "How do you protect cardholder data on public networks?",
+    question: "Do you protect cardholder data on public networks?",
     domain: "Public Network Security",
     requirement: "4.1",
     issueIfNotCompliant: "Data exposure on public networks.",
@@ -696,7 +696,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How do you ensure that security policies and operational procedures for managing firewalls and routers are documented, in use, and known to all affected parties?",
+      "Do you ensure that security policies and operational procedures for managing firewalls and routers are documented, in use, and known to all affected parties?",
     domain: "Policy Documentation & Awareness",
     requirement: "1.1.6, 12.1",
     issueIfNotCompliant: "Lack of awareness or adherence to security policies.",
@@ -734,7 +734,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How do you manage remote access to the cardholder data environment?",
+      "Do you manage remote access to the cardholder data environment?",
     domain: "Remote Access",
     requirement: "8.3",
     issueIfNotCompliant:
@@ -773,7 +773,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How do you ensure that cardholder data is only shared with authorized parties?",
+      "Do you ensure that cardholder data is only shared with authorized parties?",
     domain: "Data Sharing",
     requirement: "3.4",
     issueIfNotCompliant: "Unauthorized sharing can lead to data breaches.",
@@ -791,7 +791,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How do you ensure the proper functionality of security systems and processes?",
+      "Do you ensure the proper functionality of security systems and processes?",
     domain: "System Maintenance",
     requirement: "6.2, 11.2",
     issueIfNotCompliant:
@@ -819,7 +819,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How do you manage and secure all system components in your cardholder data environment?",
+      "Do you manage and secure all system components in your cardholder data environment?",
     domain: "System Security",
     requirement: "2.2, 6.1",
     issueIfNotCompliant:
@@ -848,7 +848,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How do you ensure that all security patches are installed within the required timeframe?",
+      "Do you ensure that all security patches are installed within the required timeframe?",
     domain: "Patch Management",
     requirement: "6.2",
     issueIfNotCompliant: "Security risks due to outdated patches.",
@@ -866,7 +866,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How do you ensure that encryption keys used for cardholder data are managed securely?",
+      "Do you ensure that encryption keys used for cardholder data are managed securely?",
     domain: "Key Management",
     requirement: "3.6",
     issueIfNotCompliant:
@@ -895,7 +895,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How do you manage and secure cardholder data in shared hosting environments?",
+      "Do you manage and secure cardholder data in shared hosting environments?",
     domain: "Shared Hosting Security",
     requirement: "2.6",
     issueIfNotCompliant: "Risks in shared hosting environments.",
@@ -923,7 +923,7 @@ export const answersA: SecurityQuestion[] = [
   },
   {
     question:
-      "How do you ensure that your third-party service providers adhere to PCI DSS requirements in shared hosting environments?",
+      "Do you ensure that your third-party service providers adhere to PCI DSS requirements in shared hosting environments?",
     domain: "Third-Party Compliance in Shared Hosting",
     requirement: "12.8",
     issueIfNotCompliant:
