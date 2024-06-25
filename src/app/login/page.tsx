@@ -17,7 +17,7 @@ function Login() {
     const { data: session } = useSession()
     useEffect(() => {
         if (session)
-            redirect ('/')
+            redirect('/')
     }, [session])
 
     const handleLogin = async (provider: string) => {
@@ -31,7 +31,7 @@ function Login() {
                     <CardTitle>Login</CardTitle>
                     <CardDescription className="w-52">You first need to login.</CardDescription>
                 </CardHeader>
-                <Separator orientation="horizontal" className="w-auto m-10 mt-0"/>
+                <Separator orientation="horizontal" className="w-auto m-10 mt-0" />
                 <CardContent className="flex flex-row gap-5">
                     <Card className="cursor-pointer" onClick={async () => await handleLogin("google")}>
                         <div className="flex items-center justify-center m-10">
@@ -40,7 +40,7 @@ function Login() {
                     </Card>
                     <Card className="cursor-pointer" onClick={async () => await handleLogin("github")}>
                         <div className="flex items-center justify-center m-10">
-                            <Image src="https://authjs.dev/img/providers/facebook.svg" alt="Github" width={40} height={40} />
+                            <Image src="https://authjs.dev/img/providers/github.svg" alt="Github" width={40} height={40} />
                         </div>
                     </Card>
                 </CardContent>

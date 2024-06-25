@@ -1,9 +1,9 @@
 import pandas as pds
 from flask_cors import CORS
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
-CORS(app, resources={r'/autofill': {'origins': '*'}})
+CORS(app)
 
 a = pds.read_csv('data/a.csv')
 b = pds.read_csv('data/b.csv')
@@ -45,4 +45,8 @@ def autofill():
     result = [r for r in result]
     return jsonify(result)
 
-app.run(host='0.0.0.0',port=6969, debug=True)
+@app.route('/', methods=['GET'])
+def hello_route ():
+    return 'Hello PCI App!'
+
+app.run(host='0.0.0.0', port=3001)
