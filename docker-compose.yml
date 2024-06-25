@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: pcidss-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - flask
+    networks:
+      - pcidss-network
+    
+  flask:
+    container_name: pcidss-flask
+    ports:
+      - "3001:3001"
+    build:
+      context: ./src/server
+      dockerfile: Dockerfile
+    volumes:
+      - ./src/server:/app
+    networks:
+      - pcidss-network
+
+networks:
+  pcidss-network:
+    driver: bridge
